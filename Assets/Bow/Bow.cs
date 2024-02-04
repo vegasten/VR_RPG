@@ -6,6 +6,7 @@ public class Bow : MonoBehaviour
     [Header("Settings")]
     [SerializeField] float _startBend = 0.3f;
     [SerializeField] float _maxPullLength = 0.5f;
+    [SerializeField] float _bowPower = 10.0f;
 
     [Header("Data")]
     [SerializeField] Transform _topOfBow;
@@ -64,6 +65,7 @@ public class Bow : MonoBehaviour
     private void ReleaseString()
     {
         (float power, Vector3 direction) = CalculatePower();
+        _stringNotch.FireArrow(power, direction);
         StartCoroutine(ResetBowStringAndNotch());
         Debug.Log($"Power: {power}      Directon: {direction}");
     }
@@ -73,8 +75,9 @@ public class Bow : MonoBehaviour
         var pullDirection = (_bowNotch.position - _stringNotch.transform.position);
         var idealDirection = _bowNotch.forward;
 
-        float power = Vector3.Dot(pullDirection, idealDirection) / _maxPullLength;
+        float powerMultiplier = Vector3.Dot(pullDirection, idealDirection) / _maxPullLength;
+        float clampedPowerMultiplier = Mathf.Clamp(powerMultiplier, 0.0f, 1.0f);
 
-        return (Mathf.Clamp(power, 0.0f, 1.0f), pullDirection.normalized);
+        return (clampedPowerMultiplier * _bowPower, pullDirection.normalized);
     }
 }

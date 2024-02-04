@@ -43,8 +43,12 @@ public class StringNotch : MonoBehaviour
     private void OnArrowReleased()
     {
         Debug.Log("Arrow released");
+        OnStringReleased?.Invoke();        
+    }
 
-        OnStringReleased?.Invoke();
+    public void FireArrow(float power, Vector3 direction)
+    {
+        _activeArrow.FireArrow(power, direction);
         _activeArrow.OnRelease -= OnArrowReleased;
         _activeArrow = null;
     }
