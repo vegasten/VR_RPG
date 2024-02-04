@@ -5,8 +5,8 @@ public class Bow : MonoBehaviour
 {
     [Header("Settings")]
     [SerializeField] float _startBend = 0.3f;
-    [SerializeField] float _maxPullLength = 0.5f;
-    [SerializeField] float _bowPower = 10.0f;
+    [SerializeField] float _maxPullLength = 0.7f;
+    [SerializeField] float _bowPower = 20.0f;
 
     [Header("Data")]
     [SerializeField] Transform _topOfBow;

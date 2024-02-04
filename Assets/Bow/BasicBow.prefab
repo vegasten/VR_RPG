@@ -645,7 +645,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ee3816456c8de4cb1206c66329ca5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startBend: 0.3
   _maxPullLength: 0.5
+  _bowPower: 10
   _topOfBow: {fileID: 6380063289836085633}
   _bottomOfBow: {fileID: 801527597219781969}
   _string: {fileID: 1527027644084279360}
@@ -666,7 +668,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -712,7 +714,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
-  m_Colliders: []
+  m_Colliders:
+  - {fileID: 410472792358808666}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
