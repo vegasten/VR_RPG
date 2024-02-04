@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 5001175521728080154}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.33, y: 0, z: 0}
+  m_LocalPosition: {x: -0.34801, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -195,6 +195,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2ab6445e6d9f7784dafde223136c290b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7051498115859415870}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2ab6445e6d9f7784dafde223136c290b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8361978997699307194}
   m_SourcePrefab: {fileID: 100100000, guid: 2ab6445e6d9f7784dafde223136c290b, type: 3}
 --- !u!4 &7423171367587360651 stripped
 Transform:
@@ -286,7 +289,19 @@ MonoBehaviour:
       m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8361978997699307194}
+        m_TargetAssemblyTypeName: Arrow, Assembly-CSharp
+        m_MethodName: Release
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_FirstFocusEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -406,3 +421,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8361978997699307194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7804658628305450289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 592932adcdfc45540858ac1f92445705, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _arrowNotch: {fileID: 2940128151096587773}

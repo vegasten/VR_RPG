@@ -193,7 +193,7 @@ Transform:
   m_GameObject: {fileID: 6660600050857059404}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.028, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -309,8 +309,6 @@ MonoBehaviour:
   _layerMask:
     serializedVersion: 2
     m_Bits: 128
-  _tagsMask:
-  - Notch
 --- !u!65 &814408047202386034
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -647,11 +645,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ee3816456c8de4cb1206c66329ca5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxPullLength: 0.5
   _topOfBow: {fileID: 6380063289836085633}
   _bottomOfBow: {fileID: 801527597219781969}
   _string: {fileID: 1527027644084279360}
-  _stringNotch: {fileID: 4868219986110694662}
   _bowNotch: {fileID: 2896968312586623007}
+  _stringNotch: {fileID: 5540752871603686335}
 --- !u!65 &410472792358808666
 BoxCollider:
   m_ObjectHideFlags: 0
