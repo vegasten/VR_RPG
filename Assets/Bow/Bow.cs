@@ -4,21 +4,41 @@ using UnityEngine;
 public class Bow : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] float _startBend = 0.3f;
-    [SerializeField] float _maxPullLength = 0.7f;
-    [SerializeField] float _bowPower = 20.0f;
+    [SerializeField]
+    float _startBend = 0.3f;
+
+    [SerializeField]
+    float _maxPullLength = 0.7f;
+
+    [SerializeField]
+    float _bowPower = 20.0f;
 
     [Header("Data")]
-    [SerializeField] Transform _topOfBow;
-    [SerializeField] Transform _bottomOfBow;
-    [SerializeField] LineRenderer _string;
-    [SerializeField] Transform _bowNotch;
-    [SerializeField] StringNotch _stringNotch;
+    [SerializeField]
+    Transform _topOfBow;
+
+    [SerializeField]
+    Transform _bottomOfBow;
+
+    [SerializeField]
+    LineRenderer _string;
+
+    [SerializeField]
+    Transform _rightBowNotch;
+
+    [SerializeField]
+    Transform _leftBowNotch;
+
+    [SerializeField]
+    StringNotch _stringNotch;
 
     private Animator _animator;
+    private GrabManager _grabManager;
 
     private void Start()
     {
+        _grabManager = GrabManager.Instance;
+
         _animator = GetComponent<Animator>();
         _animator.SetFloat("PullAmount", _startBend);
         StartCoroutine(ResetBowStringAndNotch());
@@ -38,15 +58,10 @@ public class Bow : MonoBehaviour
         yield return new WaitForEndOfFrame();
         ResetStringNotch();
         UpdateString();
-    }    
+    }
 
     private void UpdateString()
     {
-        //var topPosition = _topOfBow.position - transform.position;
-        //var bottomPosition = _bottomOfBow.position - transform.position;
-        //var notchPosition = _stringNotch.transform.position - transform.position;
-
-
         var topPosition = transform.InverseTransformPoint(_topOfBow.position);
         var bottomPosition = transform.InverseTransformPoint(_bottomOfBow.position);
         var notchPosition = transform.InverseTransformPoint(_stringNotch.transform.position);
@@ -62,6 +77,7 @@ public class Bow : MonoBehaviour
         var bottomPosition = _bottomOfBow.position;
         _stringNotch.transform.position = (topPosition + bottomPosition) / 2f;
     }
+
     private void ReleaseString()
     {
         (float power, Vector3 direction) = CalculatePower();
@@ -72,8 +88,12 @@ public class Bow : MonoBehaviour
 
     private (float, Vector3) CalculatePower()
     {
-        var pullDirection = (_bowNotch.position - _stringNotch.transform.position);
-        var idealDirection = _bowNotch.forward;
+        bool bowInRightHand = _grabManager.IsLayerInRightHand(Layers.Bow);
+
+        var activeNotch = bowInRightHand ? _leftBowNotch : _rightBowNotch;
+
+        var pullDirection = (activeNotch.position - _stringNotch.transform.position);
+        var idealDirection = activeNotch.forward;
 
         float powerMultiplier = Vector3.Dot(pullDirection, idealDirection) / _maxPullLength;
         float clampedPowerMultiplier = Mathf.Clamp(powerMultiplier, 0.0f, 1.0f);

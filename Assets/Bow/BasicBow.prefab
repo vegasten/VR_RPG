@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2412076240898308157
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4081559283122167275}
+  m_Layer: 6
+  m_Name: LeftBowNotch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4081559283122167275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2412076240898308157}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0, z: 0.0128}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4838470520669675647}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &4657859778111911541
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2896968312586623007}
   m_Layer: 6
-  m_Name: BowNotch
+  m_Name: RightBowNotch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,7 +224,7 @@ Transform:
   m_GameObject: {fileID: 6660600050857059404}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: -0.0128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -309,6 +340,9 @@ MonoBehaviour:
   _layerMask:
     serializedVersion: 2
     m_Bits: 128
+  _rightBowNotch: {fileID: 2896968312586623007}
+  _leftBowNotch: {fileID: 4081559283122167275}
+  _arrowLength: 0.7
 --- !u!65 &814408047202386034
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -565,6 +599,9 @@ PrefabInstance:
       addedObject: {fileID: 2896968312586623007}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 805e6bdfb7be5ca4282a6bec09404103, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4081559283122167275}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 805e6bdfb7be5ca4282a6bec09404103, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 4868219986110694662}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 805e6bdfb7be5ca4282a6bec09404103, type: 3}
       insertIndex: -1
@@ -651,7 +688,8 @@ MonoBehaviour:
   _topOfBow: {fileID: 6380063289836085633}
   _bottomOfBow: {fileID: 801527597219781969}
   _string: {fileID: 1527027644084279360}
-  _bowNotch: {fileID: 2896968312586623007}
+  _rightBowNotch: {fileID: 2896968312586623007}
+  _leftBowNotch: {fileID: 4081559283122167275}
   _stringNotch: {fileID: 5540752871603686335}
 --- !u!65 &410472792358808666
 BoxCollider:

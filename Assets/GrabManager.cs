@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -37,11 +38,15 @@ public class GrabManager : MonoBehaviour
     {
         if (hand == Hand.Left)
         {
-            return _leftHandInteractor.interactablesSelected.Select(x => x.transform.gameObject).FirstOrDefault();
+            return _leftHandInteractor.interactablesSelected
+                .Select(x => x.transform.gameObject)
+                .FirstOrDefault();
         }
         else
         {
-            return _rightHandInteractor.interactablesSelected.Select(x => x.transform.gameObject).FirstOrDefault();
+            return _rightHandInteractor.interactablesSelected
+                .Select(x => x.transform.gameObject)
+                .FirstOrDefault();
         }
     }
 
@@ -69,4 +74,39 @@ public class GrabManager : MonoBehaviour
         return false;
     }
 
+    public bool IsLayerInRightHand(int layer)
+    {
+        var itemInRightHand = GetItemInHand(Hand.Right);
+
+        if (itemInRightHand == null)
+            return false;
+
+        return itemInRightHand.layer == layer;
+    }
+
+    public bool IsLayerInLeftHand(int layer)
+    {
+        var itemInLeftHand = GetItemInHand(Hand.Left);
+
+        if (itemInLeftHand == null)
+            return false;
+
+        return itemInLeftHand.layer == layer;
+    }
+
+    internal bool IsGameobjectHeld(GameObject gameObject)
+    {
+        var itemInRight = GetItemInHand(Hand.Right);
+        var itemInLeft = GetItemInHand(Hand.Left);
+
+        Debug.Log($"Item in right: {itemInRight}");
+        Debug.Log($"Item in left: {itemInLeft}");
+        Debug.Log($"Item: {gameObject}");
+        Debug.Log($"ref right: {ReferenceEquals(gameObject, itemInRight)}");
+        Debug.Log($"ref left: {ReferenceEquals(gameObject, itemInLeft)}");
+
+        return (
+            ReferenceEquals(gameObject, itemInRight) || ReferenceEquals(gameObject, itemInLeft)
+        );
+    }
 }

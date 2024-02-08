@@ -1,15 +1,27 @@
 using System;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class StringNotch : MonoBehaviour
 {
     public Action OnStringReleased;
     public Action OnStringNotchedMoved;
 
-    [SerializeField] private LayerMask _layerMask;
+    [SerializeField]
+    private LayerMask _layerMask;
+
+    [SerializeField]
+    private Transform _rightBowNotch;
+
+    [SerializeField]
+    private Transform _leftBowNotch;
+
+    [SerializeField]
+    private float _arrowLength;
 
     private Arrow _activeArrow = null;
     private GrabManager _grabManager;
+    private bool _arrowInNotch = false;
 
     private void Start()
     {
@@ -23,11 +35,21 @@ public class StringNotch : MonoBehaviour
 
         transform.position = _activeArrow.GetArrowNotchPosition();
         OnStringNotchedMoved?.Invoke();
+
+        bool isBowInRightHand = _grabManager.IsLayerInRightHand(Layers.Bow);
+        var activeBowNotch = isBowInRightHand ? _leftBowNotch : _rightBowNotch;
+
+        var direction = (activeBowNotch.position - transform.position).normalized;
+        var lookAtPosition = transform.position + direction * _arrowLength * 2.0f; // TODO limit the pull distance of the notch, should be enough?
+        _activeArrow.gameObject.transform.LookAt(lookAtPosition);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!_grabManager.IsHoldingLayer(Layers.Bow) || !_grabManager.IsHoldingLayer(Layers.Arrow))
+            return;
+
+        if (!_grabManager.IsGameobjectHeld(other.transform.parent.gameObject))
             return;
 
         if (other.gameObject.tag == TagDirectory.Notch)
@@ -36,14 +58,14 @@ public class StringNotch : MonoBehaviour
 
             _activeArrow = other.transform.parent.gameObject.GetComponent<Arrow>();
             _activeArrow.OnRelease += OnArrowReleased;
+            _activeArrow.TurnOffFollowHandRotation();
         }
-
     }
 
     private void OnArrowReleased()
     {
         Debug.Log("Arrow released");
-        OnStringReleased?.Invoke();        
+        OnStringReleased?.Invoke();
     }
 
     public void FireArrow(float power, Vector3 direction)
