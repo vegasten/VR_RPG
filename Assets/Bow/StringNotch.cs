@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
 
 public class StringNotch : MonoBehaviour
 {
@@ -21,7 +20,6 @@ public class StringNotch : MonoBehaviour
 
     private Arrow _activeArrow = null;
     private GrabManager _grabManager;
-    private bool _arrowInNotch = false;
 
     private void Start()
     {
@@ -46,6 +44,9 @@ public class StringNotch : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.gameObject.layer != Layers.Arrow)
+            return;
+
         if (!_grabManager.IsHoldingLayer(Layers.Bow) || !_grabManager.IsHoldingLayer(Layers.Arrow))
             return;
 
@@ -54,8 +55,6 @@ public class StringNotch : MonoBehaviour
 
         if (other.gameObject.tag == TagDirectory.Notch)
         {
-            Debug.Log("Active arrow set!");
-
             _activeArrow = other.transform.parent.gameObject.GetComponent<Arrow>();
             _activeArrow.OnRelease += OnArrowReleased;
             _activeArrow.TurnOffFollowHandRotation();
@@ -64,7 +63,6 @@ public class StringNotch : MonoBehaviour
 
     private void OnArrowReleased()
     {
-        Debug.Log("Arrow released");
         OnStringReleased?.Invoke();
     }
 

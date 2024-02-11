@@ -1,10 +1,13 @@
-using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class GrabManager : MonoBehaviour
 {
+    [SerializeField]
+    private XRInteractionManager _interactionManager;
+
     public static GrabManager Instance;
 
     private void Awake()
@@ -17,12 +20,6 @@ public class GrabManager : MonoBehaviour
         Instance = this;
     }
 
-    public enum Hand
-    {
-        Right,
-        Left
-    };
-
     public XRDirectInteractor _leftHandInteractor;
     public XRDirectInteractor _rightHandInteractor;
 
@@ -34,7 +31,7 @@ public class GrabManager : MonoBehaviour
             return _rightHandInteractor.hasSelection;
     }
 
-    public GameObject? GetItemInHand(Hand hand)
+    public GameObject GetItemInHand(Hand hand)
     {
         if (hand == Hand.Left)
         {
@@ -94,19 +91,40 @@ public class GrabManager : MonoBehaviour
         return itemInLeftHand.layer == layer;
     }
 
-    internal bool IsGameobjectHeld(GameObject gameObject)
+    public bool IsGameobjectHeld(GameObject gameObject)
     {
         var itemInRight = GetItemInHand(Hand.Right);
         var itemInLeft = GetItemInHand(Hand.Left);
 
-        Debug.Log($"Item in right: {itemInRight}");
-        Debug.Log($"Item in left: {itemInLeft}");
-        Debug.Log($"Item: {gameObject}");
-        Debug.Log($"ref right: {ReferenceEquals(gameObject, itemInRight)}");
-        Debug.Log($"ref left: {ReferenceEquals(gameObject, itemInLeft)}");
-
         return (
             ReferenceEquals(gameObject, itemInRight) || ReferenceEquals(gameObject, itemInLeft)
         );
+    }
+
+    public void SetItemInHand(GameObject gameObject, Hand hand)
+    {
+        var interactor = hand == Hand.Left ? _leftHandInteractor : _rightHandInteractor;
+        if (IsHoldingItem(hand))
+        {
+            var itemInHand = GetItemInHand(hand);
+            var interactable = itemInHand.GetComponent<XRBaseInteractable>();
+
+            var layers = interactable.interactionLayers;
+            interactable.interactionLayers = 0;
+
+            StartCoroutine(DisableForOneFrame(interactable, layers));
+        }
+
+        _interactionManager.SelectEnter(
+            interactor,
+            gameObject.GetComponent<IXRSelectInteractable>()
+        );
+    }
+
+    // Hack to drop the grab zone interactable
+    private IEnumerator DisableForOneFrame(XRBaseInteractable interactable, int layers)
+    {
+        yield return new WaitForSeconds(0.1f);
+        interactable.interactionLayers = layers;
     }
 }

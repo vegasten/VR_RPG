@@ -83,13 +83,11 @@ public class Bow : MonoBehaviour
         (float power, Vector3 direction) = CalculatePower();
         _stringNotch.FireArrow(power, direction);
         StartCoroutine(ResetBowStringAndNotch());
-        Debug.Log($"Power: {power}      Directon: {direction}");
     }
 
     private (float, Vector3) CalculatePower()
     {
         bool bowInRightHand = _grabManager.IsLayerInRightHand(Layers.Bow);
-
         var activeNotch = bowInRightHand ? _leftBowNotch : _rightBowNotch;
 
         var pullDirection = (activeNotch.position - _stringNotch.transform.position);
