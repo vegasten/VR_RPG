@@ -33,7 +33,7 @@ public class BowCombatManager : MonoBehaviour
             return;
         }
 
-        var freehand = _grabManager.IsHoldingItem(Hand.Left) ? Hand.Right : Hand.Left;
+        var freehand = _grabManager.IsLayerInLeftHand(Layers.Bow) ? Hand.Right : Hand.Left;
 
         var arrowGameObject = Instantiate(_arrowPrefab);
         _grabManager.SetItemInHand(arrowGameObject, freehand);
