@@ -35,7 +35,11 @@ public class BowCombatManager : MonoBehaviour
 
         var freehand = _grabManager.IsLayerInLeftHand(Layers.Bow) ? Hand.Right : Hand.Left;
 
-        var arrowGameObject = Instantiate(_arrowPrefab);
+        var arrowGameObject = Instantiate(
+            _arrowPrefab,
+            new Vector3(0, -1000, 0),
+            Quaternion.identity
+        ); // TODO create pool
         _grabManager.SetItemInHand(arrowGameObject, freehand);
     }
 

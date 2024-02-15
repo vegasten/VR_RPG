@@ -23,8 +23,11 @@ public class Arrow : MonoBehaviour
     {
         if (_inFlight)
         {
-            Quaternion newRotation = Quaternion.LookRotation(_rigidBody.velocity, transform.up);
-            transform.rotation = newRotation;
+            if (_rigidBody.velocity != Vector3.zero)
+            {
+                Quaternion newRotation = Quaternion.LookRotation(_rigidBody.velocity, transform.up);
+                transform.rotation = newRotation;
+            }
         }
     }
 
