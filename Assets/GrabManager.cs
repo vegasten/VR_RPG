@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GrabManager : MonoBehaviour
 {
@@ -89,6 +91,26 @@ public class GrabManager : MonoBehaviour
             return false;
 
         return itemInLeftHand.layer == layer;
+    }
+
+    public bool IsTagInRightHand(string tag)
+    {
+        var itemInRightHand = GetItemInHand(Hand.Right);
+
+        if (itemInRightHand == null)
+            return false;
+
+        return itemInRightHand.tag == tag;
+    }
+
+    public bool IsTagInLeftHand(string tag)
+    {
+        var itemInLeftHand = GetItemInHand(Hand.Left);
+
+        if (itemInLeftHand == null)
+            return false;
+
+        return itemInLeftHand.tag == tag;
     }
 
     public bool IsGameobjectHeld(GameObject gameObject)

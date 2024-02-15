@@ -8,7 +8,7 @@ public class Bow : MonoBehaviour
     float _startBend = 0.3f;
 
     [SerializeField]
-    float _maxPullLength = 0.7f;
+    float _maxPullLength = 0.65f;
 
     [SerializeField]
     float _bowPower = 20.0f;
@@ -44,31 +44,53 @@ public class Bow : MonoBehaviour
         StartCoroutine(ResetBowStringAndNotch());
 
         _stringNotch.OnStringReleased += ReleaseString;
-        _stringNotch.OnStringNotchedMoved += UpdateString;
     }
 
     private void OnDestroy()
     {
         _stringNotch.OnStringReleased -= ReleaseString;
-        _stringNotch.OnStringNotchedMoved -= UpdateString;
+    }
+
+    private void Update()
+    {
+        var limitedNotchPosition = CalculateLimitedStringNotchPosition();
+
+        _stringNotch.UpdateLimitedNotchPosition(limitedNotchPosition);
+        UpdateString(limitedNotchPosition);
     }
 
     private IEnumerator ResetBowStringAndNotch()
     {
         yield return new WaitForEndOfFrame();
         ResetStringNotch();
-        UpdateString();
+        UpdateString(_stringNotch.transform.position);
     }
 
-    private void UpdateString()
+    private void UpdateString(Vector3 notchPosition)
     {
-        var topPosition = transform.InverseTransformPoint(_topOfBow.position);
-        var bottomPosition = transform.InverseTransformPoint(_bottomOfBow.position);
-        var notchPosition = transform.InverseTransformPoint(_stringNotch.transform.position);
+        var localTopPosition = transform.InverseTransformPoint(_topOfBow.position);
+        var localBottomPosition = transform.InverseTransformPoint(_bottomOfBow.position);
+        var localNotchPosition = transform.InverseTransformPoint(notchPosition);
 
-        _string.SetPosition(0, topPosition);
-        _string.SetPosition(1, notchPosition);
-        _string.SetPosition(2, bottomPosition);
+        _string.SetPosition(0, localTopPosition);
+        _string.SetPosition(1, localNotchPosition);
+        _string.SetPosition(2, localBottomPosition);
+    }
+
+    private Vector3 CalculateLimitedStringNotchPosition()
+    {
+        bool bowInRightHand = _grabManager.IsLayerInRightHand(Layers.Bow);
+        var activeBowNotch = bowInRightHand ? _leftBowNotch : _rightBowNotch;
+
+        var actualStringNotchPosition = _stringNotch.transform.position;
+        var distance = Vector3.Distance(actualStringNotchPosition, activeBowNotch.position);
+
+        if (distance <= _maxPullLength)
+            return _stringNotch.transform.position;
+
+        var direction = (actualStringNotchPosition - activeBowNotch.position).normalized;
+
+        return activeBowNotch.position + direction * _maxPullLength;
     }
 
     private void ResetStringNotch()

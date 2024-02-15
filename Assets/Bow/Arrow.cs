@@ -28,16 +28,6 @@ public class Arrow : MonoBehaviour
         }
     }
 
-    public void Release()
-    {
-        OnRelease?.Invoke();
-    }
-
-    public Vector3 GetArrowNotchPosition()
-    {
-        return _arrowNotch.position;
-    }
-
     public void FireArrow(float power, Vector3 direction)
     {
         EnablePhysics();
