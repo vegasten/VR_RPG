@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -32,8 +33,12 @@ public class Bow : MonoBehaviour
     [SerializeField]
     StringNotch _stringNotch;
 
+    [SerializeField]
+    float _arrowAngleLimit = 60f;
+
     private Animator _animator;
     private GrabManager _grabManager;
+    private bool _hasArrowInStringNotch = false;
 
     private void Start()
     {
@@ -44,26 +49,58 @@ public class Bow : MonoBehaviour
         StartCoroutine(ResetBowStringAndNotch());
 
         _stringNotch.OnStringReleased += ReleaseString;
+        _stringNotch.OnArrowSet += OnArrowSet;
     }
 
     private void OnDestroy()
     {
         _stringNotch.OnStringReleased -= ReleaseString;
+        _stringNotch.OnArrowSet -= OnArrowSet;
+    }
+
+    private void OnArrowSet()
+    {
+        _hasArrowInStringNotch = true;
     }
 
     private void Update()
     {
+        if (!_hasArrowInStringNotch)
+            return;
+
+        if (IsAngleTooLarge())
+        {
+            _hasArrowInStringNotch = false;
+            StartCoroutine(ResetBowStringAndNotch());
+            _stringNotch.UnstringArrow();
+            return;
+        }
+
         var limitedNotchPosition = CalculateLimitedStringNotchPosition();
 
         _stringNotch.UpdateLimitedNotchPosition(limitedNotchPosition);
         UpdateString(limitedNotchPosition);
     }
 
+    private bool IsAngleTooLarge()
+    {
+        bool bowInRightHand = _grabManager.IsLayerInRightHand(Layers.Bow);
+        var activeBowNotch = bowInRightHand ? _leftBowNotch : _rightBowNotch;
+        var bowNotchForward = activeBowNotch.forward;
+
+        var testVector = activeBowNotch.position - _stringNotch.transform.position;
+
+        var angle = Vector3.Angle(bowNotchForward, testVector);
+
+        Debug.Log(angle);
+
+        return angle > _arrowAngleLimit;
+    }
+
     private IEnumerator ResetBowStringAndNotch()
     {
         yield return new WaitForEndOfFrame();
         ResetStringNotch();
-        UpdateString(_stringNotch.transform.position);
     }
 
     private void UpdateString(Vector3 notchPosition)
@@ -98,6 +135,7 @@ public class Bow : MonoBehaviour
         var topPosition = _topOfBow.position;
         var bottomPosition = _bottomOfBow.position;
         _stringNotch.transform.position = (topPosition + bottomPosition) / 2f;
+        UpdateString(_stringNotch.transform.position);
     }
 
     private void ReleaseString()
@@ -105,6 +143,7 @@ public class Bow : MonoBehaviour
         (float power, Vector3 direction) = CalculatePower();
         _stringNotch.FireArrow(power, direction);
         StartCoroutine(ResetBowStringAndNotch());
+        _hasArrowInStringNotch = false;
     }
 
     private (float, Vector3) CalculatePower()

@@ -45,8 +45,8 @@ public class Arrow : MonoBehaviour
         _rigidBody.useGravity = true;
     }
 
-    public void TurnOffFollowHandRotation()
+    public void SetFollowHandRotation(bool follow)
     {
-        _grabInteractable.trackRotation = false;
+        _grabInteractable.trackRotation = follow;
     }
 }

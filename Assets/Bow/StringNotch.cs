@@ -5,6 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class StringNotch : MonoBehaviour
 {
     public Action OnStringReleased;
+    public Action OnArrowSet;
 
     [SerializeField]
     private LayerMask _layerMask;
@@ -46,21 +47,6 @@ public class StringNotch : MonoBehaviour
         _activeArrow.gameObject.transform.LookAt(lookAtPosition);
     }
 
-    //private void Update()
-    //{
-    //    if (_activeArrow == null)
-    //        return;
-
-    //    _activeArrow.transform.position = transform.position;
-
-    //    bool isStringInRightHand = _grabManager.IsTagInRightHand(TagDirectory.Notch);
-    //    var activeBowNotch = isStringInRightHand ? _rightBowNotch : _leftBowNotch;
-
-    //    var direction = (activeBowNotch.position - transform.position).normalized;
-    //    var lookAtPosition = transform.position + direction * _arrowLength * 2.0f;
-    //    _activeArrow.gameObject.transform.LookAt(lookAtPosition);
-    //}
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer != Layers.Arrow || other.transform.parent == null)
@@ -75,7 +61,7 @@ public class StringNotch : MonoBehaviour
         if (other.gameObject.tag == TagDirectory.Notch)
         {
             _activeArrow = other.transform.parent.gameObject.GetComponent<Arrow>();
-            _activeArrow.TurnOffFollowHandRotation();
+            _activeArrow.SetFollowHandRotation(false);
 
             _interactable.interactionLayers = _interactionLayerMask;
 
@@ -84,13 +70,28 @@ public class StringNotch : MonoBehaviour
                 : Hand.Right;
 
             _grabManager.SetItemInHand(gameObject, handWithArrow);
+            OnArrowSet?.Invoke();
         }
     }
 
     public void Release()
     {
+        if (_activeArrow == null) // Arrow was unstrung
+            return;
+
         OnStringReleased?.Invoke();
         _interactable.interactionLayers = 0;
+    }
+
+    public void UnstringArrow()
+    {
+        bool isStringInRightHand = _grabManager.IsTagInRightHand(TagDirectory.Notch);
+        Hand activeHand = isStringInRightHand ? Hand.Right : Hand.Left;
+
+        _activeArrow.SetFollowHandRotation(true);
+        _grabManager.SetItemInHand(_activeArrow.gameObject, activeHand);
+        _interactable.interactionLayers = 0;
+        _activeArrow = null;
     }
 
     public void FireArrow(float power, Vector3 direction)
