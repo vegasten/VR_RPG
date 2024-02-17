@@ -9,6 +9,9 @@ public class Bow : MonoBehaviour
     float _startBend = 0.3f;
 
     [SerializeField]
+    float _maxBend = 1f;
+
+    [SerializeField]
     float _maxPullLength = 0.65f;
 
     [SerializeField]
@@ -45,7 +48,7 @@ public class Bow : MonoBehaviour
         _grabManager = GrabManager.Instance;
 
         _animator = GetComponent<Animator>();
-        _animator.SetFloat("PullAmount", _startBend);
+        SetAnimatorPullAmount(_startBend);
         StartCoroutine(ResetBowStringAndNotch());
 
         _stringNotch.OnStringReleased += ReleaseString;
@@ -73,13 +76,14 @@ public class Bow : MonoBehaviour
             _hasArrowInStringNotch = false;
             StartCoroutine(ResetBowStringAndNotch());
             _stringNotch.UnstringArrow();
+            SetAnimatorPullAmount(_startBend);
             return;
         }
 
         var limitedNotchPosition = CalculateLimitedStringNotchPosition();
-
         _stringNotch.UpdateLimitedNotchPosition(limitedNotchPosition);
         UpdateString(limitedNotchPosition);
+        UpdateAnimatorBowBend();
     }
 
     private bool IsAngleTooLarge()
@@ -91,8 +95,6 @@ public class Bow : MonoBehaviour
         var testVector = activeBowNotch.position - _stringNotch.transform.position;
 
         var angle = Vector3.Angle(bowNotchForward, testVector);
-
-        Debug.Log(angle);
 
         return angle > _arrowAngleLimit;
     }
@@ -144,9 +146,35 @@ public class Bow : MonoBehaviour
         _stringNotch.FireArrow(power, direction);
         StartCoroutine(ResetBowStringAndNotch());
         _hasArrowInStringNotch = false;
+        SetAnimatorPullAmount(_startBend);
     }
 
     private (float, Vector3) CalculatePower()
+    {
+        var pullData = NormalizedPullData();
+        float clampedPullDistance = Mathf.Clamp(pullData.distance, 0.0f, 1.0f);
+
+        var power = clampedPullDistance * _bowPower;
+
+        return (power, pullData.direction);
+    }
+
+    private void UpdateAnimatorBowBend()
+    {
+        float normalizedPullDistance = NormalizedPullData().distance;
+
+        Debug.Log(normalizedPullDistance);
+        float clampedPullDistance = Mathf.Clamp(normalizedPullDistance, _startBend, _maxBend);
+
+        SetAnimatorPullAmount(clampedPullDistance);
+    }
+
+    private void SetAnimatorPullAmount(float pullAmount)
+    {
+        _animator.SetFloat("PullAmount", pullAmount);
+    }
+
+    private (float distance, Vector3 direction) NormalizedPullData()
     {
         bool bowInRightHand = _grabManager.IsLayerInRightHand(Layers.Bow);
         var activeNotch = bowInRightHand ? _leftBowNotch : _rightBowNotch;
@@ -154,9 +182,8 @@ public class Bow : MonoBehaviour
         var pullDirection = (activeNotch.position - _stringNotch.transform.position);
         var idealDirection = activeNotch.forward;
 
-        float powerMultiplier = Vector3.Dot(pullDirection, idealDirection) / _maxPullLength;
-        float clampedPowerMultiplier = Mathf.Clamp(powerMultiplier, 0.0f, 1.0f);
+        var normalizedDistance = Vector3.Dot(pullDirection, idealDirection) / _maxPullLength;
 
-        return (clampedPowerMultiplier * _bowPower, pullDirection.normalized);
+        return (normalizedDistance, pullDirection);
     }
 }
