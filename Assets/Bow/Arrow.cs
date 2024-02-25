@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
 public class Arrow : MonoBehaviour
 {
     public Action OnRelease;
+    public Action<GameObject> ReleaseToPool;
 
     [SerializeField]
     private Transform _arrowNotch;
@@ -12,6 +14,7 @@ public class Arrow : MonoBehaviour
     private Rigidbody _rigidBody;
     private bool _inFlight = false;
     private XRGrabInteractable _grabInteractable;
+    private float _secondsBeforeReleasingToPool = 10f;
 
     private void Awake()
     {
@@ -37,6 +40,7 @@ public class Arrow : MonoBehaviour
         _inFlight = true;
         Vector3 force = power * direction;
         _rigidBody.AddForce(force, ForceMode.Impulse);
+        StartCoroutine(ReleaseToPoolCounter());
     }
 
     private void EnablePhysics()
@@ -45,8 +49,20 @@ public class Arrow : MonoBehaviour
         _rigidBody.useGravity = true;
     }
 
+    public void DisablePhysics()
+    {
+        _rigidBody.isKinematic = true;
+        _rigidBody.useGravity = false;
+    }
+
     public void SetFollowHandRotation(bool follow)
     {
         _grabInteractable.trackRotation = follow;
+    }
+
+    private IEnumerator ReleaseToPoolCounter()
+    {
+        yield return new WaitForSeconds(_secondsBeforeReleasingToPool);
+        ReleaseToPool?.Invoke(gameObject);
     }
 }
