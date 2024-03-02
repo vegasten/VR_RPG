@@ -11,6 +11,9 @@ public class Arrow : MonoBehaviour
     [SerializeField]
     private Transform _arrowNotch;
 
+    [SerializeField]
+    private float _baseDamage = 3f;
+
     private Rigidbody _rigidBody;
     private bool _inFlight = false;
     private XRGrabInteractable _grabInteractable;
@@ -41,6 +44,12 @@ public class Arrow : MonoBehaviour
         Vector3 force = power * direction;
         _rigidBody.AddForce(force, ForceMode.Impulse);
         StartCoroutine(ReleaseToPoolCounter());
+    }
+
+    public ArrowDamageData GetArrowDamageData()
+    {
+        var speed = GetComponent<Rigidbody>().velocity.magnitude;
+        return new ArrowDamageData(_baseDamage, speed);
     }
 
     private void EnablePhysics()

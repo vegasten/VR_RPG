@@ -163,7 +163,6 @@ public class Bow : MonoBehaviour
     {
         float normalizedPullDistance = NormalizedPullData().distance;
 
-        Debug.Log(normalizedPullDistance);
         float clampedPullDistance = Mathf.Clamp(normalizedPullDistance, _startBend, _maxBend);
 
         SetAnimatorPullAmount(clampedPullDistance);
