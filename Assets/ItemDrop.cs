@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Threading.Tasks;
-using System.Xml.Schema;
 using UnityEngine;
 
 public class ItemDrop : MonoBehaviour
@@ -15,29 +12,24 @@ public class ItemDrop : MonoBehaviour
     [SerializeField]
     private float _particleEffectHeight = 1.5f;
 
+    public string DisplayName { get; private set; } = "Placeholder item name";
+
     private Rigidbody _rigidbody;
     private bool _particleEffectIsActive = false;
 
     private float _timeWithoutMovement = 0.0f;
+    private ItemDropManager _itemDropManager;
 
     private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         StartCoroutine(DestroyAfterTime());
-        StartCoroutine(Test());
-    }
 
-    private IEnumerator Test()
-    {
-        yield return new WaitForSeconds(10f);
-        Debug.Log("FORCE");
-        _rigidbody.AddForce(Vector3.left * 100f);
+        _itemDropManager = ItemDropManager.Instance;
     }
 
     private void Update()
     {
-        Debug.Log(_timeWithoutMovement);
-
         var currentlyMoving = IsMoving();
         if (!currentlyMoving)
         {
@@ -61,6 +53,34 @@ public class ItemDrop : MonoBehaviour
         {
             StopParticleEffect();
             _particleEffectIsActive = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == TagDirectory.LeftDirectInteractor)
+        {
+            _itemDropManager.RegisterItemDropInRange(this, Hand.Left);
+        }
+
+        if (other.gameObject.tag == TagDirectory.RightDirectInteractor)
+        {
+            _itemDropManager.RegisterItemDropInRange(this, Hand.Right);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log($"Entered: {other.gameObject}");
+
+        if (other.gameObject.tag == TagDirectory.LeftDirectInteractor)
+        {
+            _itemDropManager.RemoveItemDropInRange(this, Hand.Left);
+        }
+
+        if (other.gameObject.tag == TagDirectory.RightDirectInteractor)
+        {
+            _itemDropManager.RemoveItemDropInRange(this, Hand.Right);
         }
     }
 
