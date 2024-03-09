@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
@@ -28,5 +26,10 @@ public class InputReader : MonoBehaviour
     {
         if (_inputDevices.Count < 3)
             InitializeInputReader();
+    }
+
+    public List<InputDevice> GetAllInputDevices()
+    {
+        return _inputDevices;
     }
 }

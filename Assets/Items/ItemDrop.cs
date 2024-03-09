@@ -3,6 +3,11 @@ using UnityEngine;
 
 public class ItemDrop : MonoBehaviour
 {
+    public uint ItemId { get; private set; }
+
+    [SerializeField]
+    private uint _itemId;
+
     [SerializeField]
     private ParticleSystem _itemDropParticleEffect;
 
@@ -22,6 +27,8 @@ public class ItemDrop : MonoBehaviour
 
     private void Start()
     {
+        ItemId = _itemId;
+
         _rigidbody = GetComponent<Rigidbody>();
         StartCoroutine(DestroyAfterTime());
 
@@ -110,6 +117,11 @@ public class ItemDrop : MonoBehaviour
     private IEnumerator DestroyAfterTime()
     {
         yield return new WaitForSeconds(_timeBeforeDespawning);
+        Destroy(gameObject);
+    }
+
+    public void DestroyAfterPickup()
+    {
         Destroy(gameObject);
     }
 }

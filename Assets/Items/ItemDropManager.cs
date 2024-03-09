@@ -16,6 +16,9 @@ public class ItemDropManager : MonoBehaviour
     [SerializeField]
     private Transform _rightHand;
 
+    [SerializeField]
+    private InventoryManager inventoryManager;
+
     public static ItemDropManager Instance;
 
     List<ItemDrop> _itemDropsInRangeRightHand;
@@ -23,6 +26,8 @@ public class ItemDropManager : MonoBehaviour
 
     private ItemDrop _activeItemLeft = null;
     private ItemDrop _activeItemRight = null;
+
+    private ItemDatabase _itemDatabase;
 
     private void Awake()
     {
@@ -38,6 +43,7 @@ public class ItemDropManager : MonoBehaviour
     {
         _itemDropsInRangeRightHand = new List<ItemDrop>();
         _itemDropsInRangeLeftHand = new List<ItemDrop>();
+        _itemDatabase = ItemDatabase.Instance;
     }
 
     private void Update()
@@ -47,8 +53,10 @@ public class ItemDropManager : MonoBehaviour
 
         if (closestItemLeftHand != null)
         {
+            var itemData = _itemDatabase.GetItem(closestItemLeftHand.ItemId);
+
             _leftHandDisplay.Enable(true);
-            _leftHandDisplay.SetText(closestItemLeftHand.DisplayName);
+            _leftHandDisplay.SetText(itemData.DisplayName);
             _activeItemLeft = closestItemLeftHand;
         }
         else
@@ -59,8 +67,10 @@ public class ItemDropManager : MonoBehaviour
 
         if (closestItemRightHand != null)
         {
+            var itemData = _itemDatabase.GetItem(closestItemRightHand.ItemId);
+
             _rightHandDisplay.Enable(true);
-            _rightHandDisplay.SetText(closestItemRightHand.DisplayName);
+            _rightHandDisplay.SetText(itemData.DisplayName);
             _activeItemRight = closestItemRightHand;
         }
         else
@@ -94,14 +104,14 @@ public class ItemDropManager : MonoBehaviour
         }
     }
 
-    private ItemDrop GetClosestItemLeftHand()
+    public ItemDrop GetClosestItemLeftHand()
     {
         return _itemDropsInRangeLeftHand
             .OrderBy(itemDrop => Vector3.Distance(itemDrop.transform.position, _leftHand.position))
             .FirstOrDefault();
     }
 
-    private ItemDrop GetClosestItemRightHand()
+    public ItemDrop GetClosestItemRightHand()
     {
         return _itemDropsInRangeRightHand
             .OrderBy(itemDrop => Vector3.Distance(itemDrop.transform.position, _rightHand.position))
