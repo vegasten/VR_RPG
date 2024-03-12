@@ -3,13 +3,19 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
+    [SerializeField]
+    private InventoryPresenter _presenter;
+
     public List<InventoryItem> _inventoryItems;
     private ItemDatabase _itemDatabase;
+    private bool _isShowingUI = false;
 
     private void Start()
     {
         _itemDatabase = ItemDatabase.Instance;
         _inventoryItems = new List<InventoryItem>();
+
+        _presenter.EnableUI(_isShowingUI);
     }
 
     public void AddItemFromItemId(uint itemId)
@@ -35,6 +41,12 @@ public class InventoryManager : MonoBehaviour
         {
             _inventoryItems.Add(new InventoryItem { Stack = 1, Item = itemToAdd });
         }
+    }
+
+    public void ToggleInventoryUI()
+    {
+        _isShowingUI = !_isShowingUI;
+        _presenter.EnableUI(_isShowingUI);
     }
 }
 

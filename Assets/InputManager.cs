@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.PlayerSettings;
 
 public class InputManager : MonoBehaviour
 {
@@ -21,6 +23,7 @@ public class InputManager : MonoBehaviour
         _input.Enable();
         _input.XRILeftHandInteraction.Activate.performed += OnLeftActivated;
         _input.XRIRightHandInteraction.Activate.performed += OnRightActivated;
+        _input.XRILeftHandInteraction.X.performed += onX;
     }
 
     private void OnDisable()
@@ -28,6 +31,7 @@ public class InputManager : MonoBehaviour
         _input.Disable();
         _input.XRILeftHandInteraction.Activate.performed -= OnLeftActivated;
         _input.XRIRightHandInteraction.Activate.performed -= OnRightActivated;
+        _input.XRILeftHandInteraction.X.performed -= onX;
     }
 
     private void OnLeftActivated(InputAction.CallbackContext context)
@@ -46,5 +50,10 @@ public class InputManager : MonoBehaviour
         _itemDropManager.RemoveItemDropInRange(closestItemRight, Hand.Left);
         _itemDropManager.RemoveItemDropInRange(closestItemRight, Hand.Right);
         closestItemRight.DestroyAfterPickup();
+    }
+
+    private void onX(InputAction.CallbackContext context)
+    {
+        _inventoryManager.ToggleInventoryUI();
     }
 }
