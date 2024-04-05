@@ -16,6 +16,7 @@ public class InventoryManager : MonoBehaviour
         _inventoryItems = new List<InventoryItem>();
 
         _presenter.EnableUI(_isShowingUI);
+        _presenter.UpdateInventoryUI(_inventoryItems);
     }
 
     public void AddItemFromItemId(uint itemId)
@@ -41,13 +42,15 @@ public class InventoryManager : MonoBehaviour
         {
             _inventoryItems.Add(new InventoryItem { Stack = 1, Item = itemToAdd });
         }
+
+        _presenter.UpdateInventoryUI(_inventoryItems);
     }
 
     public void ToggleInventoryUI()
     {
         _isShowingUI = !_isShowingUI;
         _presenter.EnableUI(_isShowingUI);
-    }
+    }    
 }
 
 public class InventoryItem
