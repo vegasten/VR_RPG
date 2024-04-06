@@ -6,6 +6,12 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private ParticleSystem _killParticleEffect;
 
+    [SerializeField]
+    private LootManager _lootManager;
+
+    [SerializeField]
+    private uint _enemyId;
+    
     MeshRenderer _meshRenderer;
 
     private void Start()
@@ -31,6 +37,7 @@ public class Enemy : MonoBehaviour
     private void Kill()
     {
         StartCoroutine(KillCoroutine());
+        _lootManager.CreateDrop(_enemyId, transform.position);
     }
 
     private IEnumerator KillCoroutine()

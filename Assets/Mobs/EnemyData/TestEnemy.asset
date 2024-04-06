@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7421394a9421442b3f396aaa65eedb, type: 3}
+  m_Name: TestEnemy
+  m_EditorClassIdentifier: 
+  DropTable: {fileID: 11400000, guid: 575bfd606d5484e44a6164a09c0d170f, type: 2}
+  Prefab: {fileID: 1966938050239866264, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
+  Health: 100
