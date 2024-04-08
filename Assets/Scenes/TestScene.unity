@@ -596,6 +596,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2702310871121813074, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d8c69c88d379c040a6f2ed356c1d3b4, type: 2}
     - target: {fileID: 3018000925138606713, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
       propertyPath: _lootManager
       value: 
@@ -661,6 +665,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2702310871121813074, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d8c69c88d379c040a6f2ed356c1d3b4, type: 2}
     - target: {fileID: 3018000925138606713, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
       propertyPath: _lootManager
       value: 
@@ -737,6 +745,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2702310871121813074, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d8c69c88d379c040a6f2ed356c1d3b4, type: 2}
     - target: {fileID: 3018000925138606713, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
       propertyPath: _lootManager
       value: 
@@ -922,6 +934,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2702310871121813074, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d8c69c88d379c040a6f2ed356c1d3b4, type: 2}
     - target: {fileID: 3018000925138606713, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
       propertyPath: _lootManager
       value: 
@@ -1457,6 +1473,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2702310871121813074, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d8c69c88d379c040a6f2ed356c1d3b4, type: 2}
     - target: {fileID: 3018000925138606713, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
       propertyPath: _lootManager
       value: 
@@ -2222,6 +2242,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2702310871121813074, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9d8c69c88d379c040a6f2ed356c1d3b4, type: 2}
     - target: {fileID: 3018000925138606713, guid: 8909fc5808239bd488e9d8998f260374, type: 3}
       propertyPath: _lootManager
       value: 

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using DG.Tweening;
 
 public class Enemy : MonoBehaviour
 {
@@ -11,16 +12,22 @@ public class Enemy : MonoBehaviour
 
     [SerializeField]
     private uint _enemyId;
-    
+
     MeshRenderer _meshRenderer;
+    Material _material;
+
+    bool _isKilled = false;
 
     private void Start()
     {
         _meshRenderer = GetComponent<MeshRenderer>();
+        _material = _meshRenderer.material;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_isKilled) return;
+
         if (other.gameObject.layer != Layers.Arrow)
             return;
 
@@ -36,16 +43,24 @@ public class Enemy : MonoBehaviour
 
     private void Kill()
     {
+        _isKilled = true;
         StartCoroutine(KillCoroutine());
         _lootManager.CreateDrop(_enemyId, transform.position);
     }
 
     private IEnumerator KillCoroutine()
     {
+
+        float dissolveFactor = 1f;
+        float dissolveTime = 3f;
+
+        DOTween.To(() => dissolveFactor, x => dissolveFactor = x, 0f, dissolveTime)
+            .OnUpdate(() => _material.SetFloat("_DissolveFactor", dissolveFactor));
         _killParticleEffect.Play();
-        yield return new WaitForSeconds(0.3f);
-        _meshRenderer.enabled = false;
-        yield return new WaitForSeconds(2.0f);
+
+        yield return new WaitForSeconds(dissolveTime);
+        yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
+
     }
 }
