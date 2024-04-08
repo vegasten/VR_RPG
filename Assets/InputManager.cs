@@ -37,19 +37,27 @@ public class InputManager : MonoBehaviour
     private void OnLeftActivated(InputAction.CallbackContext context)
     {
         var closestItemLeft = _itemDropManager.GetClosestItemLeftHand();
-        _inventoryManager.AddItemFromItemId(closestItemLeft.ItemId);
-        _itemDropManager.RemoveItemDropInRange(closestItemLeft, Hand.Left);
-        _itemDropManager.RemoveItemDropInRange(closestItemLeft, Hand.Right);
-        closestItemLeft.DestroyAfterPickup();
+
+        if (closestItemLeft != null)
+        {
+            _inventoryManager.AddItemFromItemId(closestItemLeft.ItemId);
+            _itemDropManager.RemoveItemDropInRange(closestItemLeft, Hand.Left);
+            _itemDropManager.RemoveItemDropInRange(closestItemLeft, Hand.Right);
+            closestItemLeft.DestroyAfterPickup();
+        }
     }
 
     private void OnRightActivated(InputAction.CallbackContext context)
     {
         var closestItemRight = _itemDropManager.GetClosestItemRightHand();
-        _inventoryManager.AddItemFromItemId(closestItemRight.ItemId);
-        _itemDropManager.RemoveItemDropInRange(closestItemRight, Hand.Left);
-        _itemDropManager.RemoveItemDropInRange(closestItemRight, Hand.Right);
-        closestItemRight.DestroyAfterPickup();
+
+        if (closestItemRight != null)
+        {
+            _inventoryManager.AddItemFromItemId(closestItemRight.ItemId);
+            _itemDropManager.RemoveItemDropInRange(closestItemRight, Hand.Left);
+            _itemDropManager.RemoveItemDropInRange(closestItemRight, Hand.Right);
+            closestItemRight.DestroyAfterPickup();
+        }
     }
 
     private void onX(InputAction.CallbackContext context)
